@@ -1,6 +1,7 @@
 import os
 import random
 import sys
+import time
 import pygame as pg
 
 
@@ -29,6 +30,27 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     return (yoko, tate)
 
 
+def en1_GO(screen: pg.Surface) -> None:
+    """
+    ゲームオーバー画面の実装
+    ブラックアウト、こうかとん画像2枚、gameoverの文字を表示する
+    """
+    # ブラックアウト
+    go_bg = pg.Surface((1100,650))
+    pg.draw.rect(go_bg, (0, 0, 0), pg.Rect(0, 0, 1100, 650))
+    go_bg.set_alpha(200)
+    # 悲しむこうかとん
+    kk_go = pg.image.load("fig/8.png")
+    # gameoverの文字
+    fonto = pg.font.Font(None, 100)
+    txt = fonto.render("Game Over",True, (255, 255, 255))
+    screen.blit(go_bg, [0, 0])
+    screen.blit(kk_go, [330, 250])
+    screen.blit(kk_go, [760, 250])
+    screen.blit(txt, [380, 250])
+    
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -37,6 +59,8 @@ def main():
     bb_img = pg.Surface((20, 20))
     pg.draw.circle(bb_img, (255, 0, 0), (10, 10), 10)
     bb_img.set_colorkey((0, 0, 0))
+
+    
 
     kk_rct = kk_img.get_rect()
     kk_rct.center = 300, 200
@@ -54,7 +78,9 @@ def main():
         screen.blit(bg_img, [0, 0]) 
 
         if kk_rct.colliderect(bb_rct):
-            print("gameover")
+            en1_GO(screen)
+            pg.display.update()
+            time.sleep(5)
             return
 
         key_lst = pg.key.get_pressed()
