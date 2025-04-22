@@ -137,15 +137,16 @@ def main():
         # こうかとん画像切替
         kk_img = en3_get_kk_img((0, 0))
         kk_img = en3_get_kk_img(tuple(sum_mv))
-
-        # if key_lst[pg.K_UP]:
-        #     sum_mv[1] -= 5
-        # if key_lst[pg.K_DOWN]:
-        #     sum_mv[1] += 5
-        # if key_lst[pg.K_LEFT]:
-        #     sum_mv[0] -= 5
-        # if key_lst[pg.K_RIGHT]:
-        #     sum_mv[0] += 5
+        """
+        if key_lst[pg.K_UP]:
+            sum_mv[1] -= 5
+        if key_lst[pg.K_DOWN]:
+            sum_mv[1] += 5
+        if key_lst[pg.K_LEFT]:
+            sum_mv[0] -= 5
+        if key_lst[pg.K_RIGHT]:
+            sum_mv[0] += 5
+        """
         kk_rct.move_ip(sum_mv)
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
