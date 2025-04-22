@@ -12,6 +12,16 @@ DELTA = {
     pg.K_LEFT: (-5, 0),
     pg.K_RIGHT: (+5, 0)
 }
+kk_imgs = {
+    (-5, 0): pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9),
+    (-5, +5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 45, 0.9),
+    (0, +5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 90, 0.9),
+    (+5, +5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 135, 0.9),
+    (+5, 0): pg.transform.rotozoom(pg.image.load("fig/3.png"), 180, 0.9),
+    (+5, -5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 225, 0.9),
+    (0, -5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 270, 0.9),
+    (-5, -5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 315, 0.9),
+}
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -31,7 +41,7 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     return (yoko, tate)
 
 
-def en1_GO(screen: pg.Surface) -> None:
+def en1_gameover(screen: pg.Surface) -> None:
     """
     ゲームオーバー画面の実装
     ブラックアウト、こうかとん画像2枚、gameoverの文字を表示する
@@ -64,6 +74,14 @@ def en2_init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
         bb_img.set_colorkey((0, 0, 0))  
         bb_val.append(bb_img)
     return bb_val, bb_accs
+
+
+def en3_get_kk_img(sum_mv: tuple[int, int]) -> pg.Surface:
+    """
+    移動量の合計値タプルに対応する向きの画像Surfaceを返す
+    """
+    return kk_imgs[sum_mv]
+
     
 
 
@@ -90,7 +108,7 @@ def main():
     clock = pg.time.Clock()
     tmr = 0
 
-    bb_imgs, bb_accs = init_bb_imgs()
+    bb_imgs, bb_accs = en2_init_bb_imgs()
 
     while True:
         for event in pg.event.get():
@@ -99,7 +117,7 @@ def main():
         screen.blit(bg_img, [0, 0]) 
 
         if kk_rct.colliderect(bb_rct):
-            en1_GO(screen)
+            en1_gameover(screen)
             pg.display.update()
             time.sleep(5)
             return
@@ -115,6 +133,10 @@ def main():
             if key_lst[key]:
                 sum_mv[0] += mv[0]
                 sum_mv[1] += mv[1]
+
+        # こうかとん画像切替
+        kk_img = en3_get_kk_img((0, 0))
+        kk_img = en3_get_kk_img(tuple(sum_mv))
 
         # if key_lst[pg.K_UP]:
         #     sum_mv[1] -= 5
